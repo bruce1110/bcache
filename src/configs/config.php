@@ -6,7 +6,7 @@ class config
      private static $configs = null;
      public static function getServers($driver)
      {
-          self::$configs = empty(self::$configs)?parse_ini_file(ROOT . '/../configs/config.ini', true) : self::$configs;
+          self::$configs = empty(self::$configs)?parse_ini_file(ROOT . '/configs/config.ini', true) : self::$configs;
           $servers = array();
           foreach(self::$configs[$driver] as $v)
           {
@@ -29,7 +29,7 @@ class config
 
      public static function getMysqls()
      {
-          self::$configs = empty(self::$configs)?parse_ini_file(ROOT . '/../configs/config.ini', true) : self::$configs;
+          self::$configs = empty(self::$configs)?parse_ini_file(ROOT . '/configs/config.ini', true) : self::$configs;
           return self::$configs['mysqld'];
      }
 }
