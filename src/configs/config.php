@@ -1,5 +1,4 @@
 <?php
-
 namespace configs;
 
 class config
@@ -7,7 +6,7 @@ class config
      private static $configs = null;
      public static function getServers($driver)
      {
-          self::$configs = empty(self::$configs)?parse_ini_file('/work/bcache/configs/memcached.ini', true) : self::$configs;
+          self::$configs = empty(self::$configs)?parse_ini_file(ROOT . '/../configs/config.ini', true) : self::$configs;
           $servers = array();
           foreach(self::$configs[$driver] as $v)
           {
@@ -19,7 +18,18 @@ class config
 
      public static function getOptions()
      {
-          self::$configs = empty(self::$configs)?parse_ini_file('/work/bcache/configs/memcached.ini', true) : self::$configs;
-          return self::$configs['options'];
+          $options = array(
+                    \Memcached::OPT_DISTRIBUTION=>\Memcached::DISTRIBUTION_CONSISTENT,
+                    \Memcached::OPT_LIBKETAMA_COMPATIBLE=>true,
+                    \Memcached::OPT_COMPRESSION=>true,
+                    \Memcached::OPT_SERIALIZER=>\Memcached::SERIALIZER_PHP
+                    );
+          return $options;
+     }
+
+     public static function getMysqls()
+     {
+          self::$configs = empty(self::$configs)?parse_ini_file(ROOT . '/../configs/config.ini', true) : self::$configs;
+          return self::$configs['mysqld'];
      }
 }

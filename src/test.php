@@ -1,11 +1,9 @@
 <?php
 
-include('configs/config.php');
-include('cached/mcached.php');
+include('start.php');
+use db\My;
 
-use cached\mcached;
-use configs\config;
 
-$m = new mcached();
-
-echo $m->set('name','qinchong');
+$my = new My();
+$a = $my->query('select * from uids');
+var_dump($a);

@@ -2,6 +2,7 @@
 
 namespace cached;
 use configs\config;
+use memcached;
 
 class mcached
 {
@@ -21,8 +22,8 @@ class mcached
           {
                $this->servers = config::getServers($this->driver);
                $this->options = config::getOptions();
-               $this->cache = new \memcached();
-               //$this->cache->setOptions($this->options);
+               $this->cache = new memcached();
+               $this->cache->setOptions($this->options);
                $this->cache->addServers($this->servers);
           }
      }
@@ -30,7 +31,7 @@ class mcached
      public function get($k)
      {
           $value = $this->cache->get($k);
-          if($this->cache->getResultCode == Memcached::RES_SUCCESS)
+          if($this->cache->getResultCode() == Memcached::RES_SUCCESS)
                return $value;
           else
                return false;
