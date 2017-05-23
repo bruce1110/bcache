@@ -4,7 +4,7 @@ namespace cached;
 use configs\config;
 use memcached;
 
-class mcached
+class mCached
 {
      private $cache;
      private $expire = 0;

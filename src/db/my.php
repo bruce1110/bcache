@@ -5,7 +5,7 @@ use configs\config;
 use PDO;
 
 
-class My
+class my
 {
      private $Dsn;
      private $DBUser;
