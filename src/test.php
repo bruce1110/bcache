@@ -1,9 +1,9 @@
 <?php
 
 include('start.php');
-use db\My;
+use libs\db\my;
 
 
-$my = new My();
-$a = $my->query('select * from uids');
-var_dump($a);
+$my = new my();
+$my->query('insert into uids values()');
+var_dump($my->lastInsertId());
