@@ -1,6 +1,6 @@
 <?php
 
 define('ROOT', __DIR__ . '/..');
-include('configs/config.php');
-include('cached/mCached.php');
-include('db/my.php');
+include('libs/configs/config.php');
+include('libs/cached/mCached.php');
+include('libs/db/my.php');
