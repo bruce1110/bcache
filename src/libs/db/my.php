@@ -180,4 +180,11 @@ class my
 		header("Status: 500 Internal Server Error");
 		return $exception;
 	}
+
+	public function getDataById($tablename, $id)
+	{
+		$sql = 'select * from ' . $tablename . ' where id=' . $id;
+		var_dump($sql);
+		return $this->query($sql)[0];
+	}
 }
