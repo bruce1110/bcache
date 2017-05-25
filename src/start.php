@@ -1,9 +1,5 @@
 <?php
 
 define('ROOT', __DIR__ . '/..');
-include('libs/configs/config.php');
-include('libs/cached/mCached.php');
-include('libs/db/my.php');
-include('libs/model/base.php');
-include('common/model/users.php');
-include('libs/uuid/idCreate.php');
+include('libs/load/autoload.php');
+spl_autoload_register('libs\load\autoload::load');
