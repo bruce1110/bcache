@@ -4,11 +4,11 @@ namespace common\model;
 
 use libs\model\base;
 
-class uuids extends base
+class users extends base
 {
 	protected $id;
-	protected $table=array();
-	protected $tablename = 'uuids';
+	protected $table=array('name','address');
+	protected $tablename = 'users';
 	public function __construct($id = 0)
 	{
 		parent::__construct($id);

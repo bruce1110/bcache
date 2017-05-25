@@ -181,10 +181,30 @@ class my
 		return $exception;
 	}
 
-	public function getDataById($tablename, $id)
+	public function getDataById($tableName, $id)
 	{
-		$sql = 'select * from ' . $tablename . ' where id=' . $id;
-		var_dump($sql);
+		$sql = 'select * from ' . $tableName . ' where id=' . $id;
 		return $this->query($sql)[0];
+	}
+
+	public function updateById($tableName, $id, $value)
+	{
+		$keys = array_keys($value);
+		$params = array_values($value);
+		$params[] = $id;
+		foreach($keys as &$v)
+		{
+			$v = $v . '=?';
+		}
+		$query = 'UPDATE ' . $tableName . ' SET ' . implode(',', $keys) . ' WHERE id = ?';
+		return $this->query($query, $params);
+	}
+
+	public function insertData($tableName, $value)
+	{
+		$keys = array_keys($value);
+		$params = array_values($value);
+		$query = 'INSERT INTO ' . $tableName . '(' . implode(',',$keys) . ') VALUES(' . implode(',',array_fill(0, count($keys), '?')) . ')';
+		return $this->query($query, $params);
 	}
 }

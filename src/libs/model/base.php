@@ -3,14 +3,32 @@
 namespace libs\model;
 use libs\cached\mCached;
 use libs\db\my;
+use libs\uuid\idCreate;
+
 abstract class base
 {
-	private $data = array();
+	
+	private $data = array();//从缓存或者数据库读取的数据
+	private $m = null;
+	private $my = null;
+	private $insert = array();//插入的数据
+	private $update = array();//更新的数据
+	private $add = false;
+
+	/**
+	 * @brief 
+	 *
+	 * @params $id
+	 *
+	 * @return 
+	 */
 	public function __construct($id)
 	{
+		$this->m = new mCached();
+		$this->my = new my();
 		if(empty($id))
 		{
-
+			$this->createId();
 		}
 		else
 		{
@@ -18,37 +36,113 @@ abstract class base
 			$this->load();
 		}
 	}
+
+	/**
+	 * @brief 设置主键
+	 *
+	 * @params $id
+	 *
+	 * @return 
+	 */
 	private function setId($id)
 	{
 		$this->id = $id;
 	}
-	private function getId()
+
+	/**
+	 * @brief 生成唯一id ,并将id放入待插入数组
+	 *
+	 * @return 
+	 */
+	private function createId()
 	{
-		return $this->id;
+		$this->add = true;
+		$this->id = idCreate::get();
+		$this->insert['id'] = $this->id;
 	}
+
+	/**
+	 * @brief 获取元素的值
+	 *
+	 * @params $name
+	 *
+	 * @return 
+	 */
 	public function __get($name)
 	{
-		if(isset($this->table[$name]))
-			return $this->table[$name];
+		if(in_array($name, $this->table))
+			return $this->data[$name];
 		else
 			return false;
 	}
+
+	/**
+	 * @brief 为元素赋值
+	 *
+	 * @params $name
+	 * @params $value
+	 *
+	 * @return 
+	 */
 	public function __set($name,$value)
 	{
-		if(isset($this->table[$name]))
-			$this->table[$name] = $value;
+		if(in_array($name, $this->table))
+			if($this->add)
+				$this->insert[$name] = $value;
+			else
+				$this->update[$name] = $value;
 	}
-	//数据加载		
+	
+	/**
+	 * @brief 从缓存或者数据库加载数据
+	 *
+	 * @return 
+	 */
 	private function load()
 	{
-		$m = new mCached();
-		$this->data = $m->get($this->id);
-		var_dump($this->data);
+		$this->data = $this->m->get($this->id);
 		if(empty($this->data))
 		{
-			$my = new my();
-			$this->data = $my->getDataById($this->tablename, $this->id);
-			$m->set($this->id, $this->data);
+			$this->data = $this->my->getDataById($this->tablename, $this->id);
+			$this->m->set($this->id, $this->data);
 		}
+	}
+
+	/**
+	 * @brief 清空缓存
+	 *
+	 * @return 
+	 */
+	private function flush()
+	{
+		if(!empty($this->update))
+		{
+			$this->m->del($this->id);
+		}
+	}
+
+
+	/**
+	 * @brief 保存数据
+	 *
+	 * @return 
+	 */
+	private function save()
+	{
+		if(!empty($this->update))
+			$this->my->updateById($this->tablename, $this->id, $this->update);
+		if(!empty($this->insert))
+			$this->my->insertData($this->tablename, $this->insert);
+	}
+
+	/**
+	 * @brief 析构函数
+	 *
+	 * @return 
+	 */
+	public function __destruct()
+	{
+		$this->flush();
+		$this->save();
 	}
 }

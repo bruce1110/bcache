@@ -42,4 +42,9 @@ class mCached
 		$this->cache->set($k, $v, $expire);
 		return $this->cache->getResultCode();
 	}
+
+	public function del($key)
+	{
+		$this->cache->delete($key);
+	}
 }
