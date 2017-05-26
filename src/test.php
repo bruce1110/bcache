@@ -1,7 +1,10 @@
 <?php
 
-include('start.php');
-use libs\db\my;
-use common\model\users;
+define('ROOT', __DIR__ . '/..');
+require('../vendor/autoload.php');
 
-$my = new my();
+use BCache\App\Model\Users;
+
+$u = new Users(13);
+$u->name = 'bruce';
+echo $u->address;

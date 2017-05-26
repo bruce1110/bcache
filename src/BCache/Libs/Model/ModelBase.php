@@ -1,11 +1,11 @@
 <?php
 
-namespace libs\model;
-use libs\cached\mCached;
-use libs\db\my;
-use libs\uuid\idCreate;
+namespace BCache\Libs\Model;
+use BCache\Libs\Cache\MCached;
+use BCache\Libs\Db\My;
+use BCache\Libs\UUId\IdCreate;
 
-abstract class base
+abstract class ModelBase
 {
 	
 	private $data = array();//从缓存或者数据库读取的数据

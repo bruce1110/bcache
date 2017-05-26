@@ -1,0 +1,24 @@
+{
+    "name": "bcache/bcache",
+    "description": "a cache",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "bruce",
+            "email": "bruce@bruce.net.cn"
+        }
+    ],
+    "autoload": {
+    "psr-4": {
+    "BCache\\": "src/BCache"
+    }
+    },
+    "require": {},
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+        }
+    }
+}

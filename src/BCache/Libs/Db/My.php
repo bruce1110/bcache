@@ -1,11 +1,11 @@
 <?php
-namespace libs\db;
+namespace BCache\Libs\Db;
 
-use libs\configs\config;
+use BCache\Libs\Configs\Config;
 use PDO;
 
 
-class my
+class My
 {
 	private $Dsn;
 	private $DBUser;

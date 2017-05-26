@@ -1,7 +1,7 @@
 <?php
-namespace libs\configs;
+namespace BCache\Libs\Configs;
 
-class config
+class Config
 {
 	private static $configs = null;
 	public static function getServers($driver)

@@ -1,10 +1,10 @@
 <?php
 
-namespace libs\cached;
-use libs\configs\config;
+namespace BCache\Libs\Cache;
+use BCache\Libs\Configs\Config;
 use memcached;
 
-class mCached
+class MCached
 {
 	private $cache;
 	private $expire = 0;

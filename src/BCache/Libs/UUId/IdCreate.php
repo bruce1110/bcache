@@ -1,10 +1,10 @@
 <?php
 
-namespace libs\uuid;
+namespace BCache\Libs\UUId;
 
-use libs\db\my;
+use BCache\Libs\Db\My;
 
-class idCreate
+class IdCreate
 {
 	public static function get()
 	{

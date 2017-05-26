@@ -1,10 +1,10 @@
 <?php
 
-namespace common\model;
+namespace BCache\App\Model;
 
-use libs\model\base;
+use BCache\Libs\Model\ModelBase;
 
-class users extends base
+class Users extends ModelBase
 {
 	protected $id;
 	protected $table=array('name','address');
