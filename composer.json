@@ -14,7 +14,9 @@
     "BCache\\": "src/BCache"
     }
     },
-    "require": {},
+    "require": {
+	    "php":">=5.5.38"
+    },
     "repositories": {
         "packagist": {
             "type": "composer",
