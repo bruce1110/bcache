@@ -8,6 +8,7 @@ use BCache\Libs\UUId\IdCreate;
 abstract class ModelBase
 {
 	
+	private $id = 0;
 	private $data = array();//从缓存或者数据库读取的数据
 	private $m = null;
 	private $my = null;

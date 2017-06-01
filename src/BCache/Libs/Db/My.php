@@ -7,10 +7,10 @@ use PDO;
 
 class My
 {
-	private $Dsn;
-	private $DBUser;
-	private $DBPassword;
-	private $pdo;
+	private static $Dsn;
+	private static $DBUser;
+	private static $DBPassword;
+	private static $pdo = null;
 	private $sQuery;
 	private $bConnected = false;
 	private $parameters;
@@ -21,10 +21,7 @@ class My
 
 	public function __construct()
 	{
-		$configs = config::getMysqls();
-		$this->Dsn       = $configs['dsn'];
-		$this->DBUser     = $configs['user'];
-		$this->DBPassword = $configs['passwd'];
+		
 		$this->Connect();
 		$this->parameters = array();
 	}
@@ -33,20 +30,25 @@ class My
 	private function Connect()
 	{
 		try {
-			$this->pdo = new PDO($this->Dsn,
-					$this->DBUser, 
-					$this->DBPassword,
-					array(
-						//For PHP 5.3.6 or lower
-						PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8",
-						PDO::ATTR_EMULATE_PREPARES => false,
-						//长连接
-						//PDO::ATTR_PERSISTENT => true,
-
-						PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-						PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true
-					     )
-					);
+			if( !self::$pdo instanceof PDO ){
+				$configs = config::getMysqls();
+				self::$Dsn       = $configs['dsn'];
+				self::$DBUser     = $configs['user'];
+				self::$DBPassword = $configs['passwd'];
+				self::$pdo = new PDO(self::$Dsn,
+						self::$DBUser, 
+						self::$DBPassword,
+						array(
+							//For PHP 5.3.6 or lower
+							PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8",
+							PDO::ATTR_EMULATE_PREPARES => false,
+							//长连接
+							//PDO::ATTR_PERSISTENT => true,
+							PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+							PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true
+						     )
+						);
+			}
 			/*
 			//For PHP 5.3.6 or lower
 			$this->pdo->setAttribute(PDO::MYSQL_ATTR_INIT_COMMAND, 'SET NAMES utf8');
@@ -65,7 +67,7 @@ class My
 
 	public function CloseConnection()
 	{
-		$this->pdo = null;
+		self::$pdo = null;
 	}
 
 
@@ -76,7 +78,7 @@ class My
 		}
 		try {
 			$this->parameters = $parameters;
-			$this->sQuery     = $this->pdo->prepare($this->BuildParams($query, $this->parameters));
+			$this->sQuery     = self::$pdo->prepare($this->BuildParams($query, $this->parameters));
 
 			if (!empty($this->parameters)) {
 				if (array_key_exists(0, $parameters)) {
@@ -134,7 +136,7 @@ class My
 
 	public function lastInsertId()
 	{
-		return $this->pdo->lastInsertId();
+		return self::$pdo->lastInsertId();
 	}
 
 
