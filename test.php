@@ -1,9 +1,11 @@
 <?php
 
 require('start.php');
-use BCache\App\Model\Users;
+use BCache\App\Entity\Users;
+use BCache\App\Mapper\UsersMapper;
 
-$u = new Users(13);
-echo $u->name;
+$um = new UsersMapper();
+//$um->name = 'qinchng';
+
 
 //http://blog.csdn.net/happen_zhang/article/details/12761747
