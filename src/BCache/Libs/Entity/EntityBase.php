@@ -11,21 +11,26 @@ namespace BCache\Libs\Entity;
 
 abstract class EntityBase
 {
-	protected $id;
+	private $id;
 	public function __construct($id)
 	{
 		$this->id = $id;
 	}
 
+	public function getId()
+	{
+		return $this->id;
+	}
+
 	public function __set($name, $value)
 	{
-		if(property_exists(get_class($this), $name))
+		if(property_exists(get_class($this), $name) && $name != 'id')
 			$this->$name = $value;
 	}
 
 	public function __get($name)
 	{
-		if(property_exists(get_class($this), $name))
+		if(property_exists(get_class($this), $name) && $name != 'id')
 			return $this->$name;
 	}
 }

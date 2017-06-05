@@ -185,8 +185,9 @@ class My
 
 	public function getDataById($tableName, $id)
 	{
-		$sql = 'select * from ' . $tableName . ' where id=' . $id;
-		return $this->query($sql)[0];
+		$sql = 'SELECT * FROM ' . $tableName . ' WHERE id = ?';
+		$re = $this->row($sql, array($id));
+		return empty($re) ? array() : $re;
 	}
 
 	public function updateById($tableName, $id, $value)
@@ -208,5 +209,14 @@ class My
 		$params = array_values($value);
 		$query = 'INSERT INTO ' . $tableName . '(' . implode(',',$keys) . ') VALUES(' . implode(',',array_fill(0, count($keys), '?')) . ')';
 		return $this->query($query, $params);
+	}
+
+	public function getOrderDataByWhere($tableName, $fields, $where, $order, $params)
+	{
+		$fields_str = implode($fields, ',');
+		$where_str = implode($where, ' = ? and ') . ' = ?';
+		$order_str = str_replace('_', ' ', implode($order, ','));
+		$sql = 'SELECT '. $fields_str . ' FROM ' . $tableName . ' WHERE ' . $where_str . ' ORDER BY ' . $order_str;
+		return $this->query($sql, $params);
 	}
 }
