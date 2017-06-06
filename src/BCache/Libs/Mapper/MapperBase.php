@@ -56,6 +56,7 @@ abstract class MapperBase
 
 	/**
 	 * @brief 返回对象数组
+	 * 如果只有一个元素，返回一个对象
 	 *
 	 * @return
 	 */
@@ -76,7 +77,7 @@ abstract class MapperBase
 			}
 			$objArray[] = $obj;
 		}
-		return $objArray;
+		return count($objArray) == 1 ? array_pop($objArray) : $objArray;
 	}
 
 	private function getDataById($id)
@@ -107,21 +108,47 @@ abstract class MapperBase
 		return $this->my->updateById($this->table, $obj->getId(), $data);
 	}
 
+	/**
+	 * @brief 从数据库查找
+	 *
+	 * @params $match
+	 * @params $params
+	 *
+	 * @return
+	 */
 	private function getDataFromMy($match, $params)
 	{
 		if($match[1] == 'all')
+		{
+			$limit = array();
 			$fields = array('*');
+		}
 		else
-			$fields = explode('_and_', $match[1]);
+		{
+			$limit = array(0,1);
+			$fields = array('*');
+		}
 		$where = explode('_and_' , $match[2]);
 		if(isset($match[3]))
 			$order = explode('_and_', $match[3]);
 		else
 			$order = explode('_and_', 'id_desc');//默认按照id降序排列
+		//根据id查找的时候，先查找cache
 		if(empty(array_diff($where, array('id'))))
-			$this->data[] = $this->cache->get($params[0]);
+		{
+			$cache = $this->cache->get($params[0]['id']);
+			if(!empty($cache))
+				$this->data[] = $cache;
+		}
 		if(empty($this->data))
-			echo 'ok';exit;
-			$this->data = $this->my->getOrderDataByWhere($this->table, $fields, $where, $order, $params);
+		{
+			$this->data = $this->my->getOrderDataByWhere($this->table, $fields, $where, $order, $limit, $params[0]);
+			//写入cache,循环写入
+			if(!empty($this->data))
+			{
+				foreach($this->data as $v)
+					$this->cache->set($v['id'], $v);
+			}
+		}
 	}
 }
