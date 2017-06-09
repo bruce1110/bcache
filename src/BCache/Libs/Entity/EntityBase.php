@@ -33,4 +33,13 @@ abstract class EntityBase
 		if(property_exists(get_class($this), $name) && $name != 'id')
 			return $this->$name;
 	}
+
+	public function getAllData()
+	{
+		$data = array();
+		foreach($this as $k=>$v)
+			if(!empty($v))
+				$data[$k] = $v;
+		return $data;
+	}
 }

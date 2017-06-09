@@ -12,6 +12,7 @@ use BCache\Libs\Cache\MCached;
 use BCache\Libs\Db\My;
 use BCache\Libs\Entity\EntityBase;
 use BCache\App\Entity\Users;
+use BCache\Libs\UUId\IdCreate;
 
 abstract class MapperBase
 {
@@ -19,6 +20,7 @@ abstract class MapperBase
 	private $cache = null;
 	private $my = null;
 	private $data = array();
+	private $one = false;
 	public function __construct()
 	{
 		$this->cache = new MCached();
@@ -27,31 +29,23 @@ abstract class MapperBase
 
 	public function __call($name, $parms)
 	{
-		/* if(strcmp($name, 'find_all_by_id') == 0) */
-		/* { */
-		/* 	$this->getDataById($parms[0]); */
-		/* 	//装载数据 */
-		/* 	$obj = $this->load(); */
-		/* 	return $obj; */
-		/* } */
-		/* else */
-		/* { */
-			preg_match( "/^find_([\w]*)_by_([\w]*)_order_by_([\w]*)$/",  $name, $match1);
-			preg_match( "/^find_([\w]*)_by_([\w]*)$/",  $name, $match2);
-			if(!empty($match1))
-				$match = $match1;
-			elseif(!empty($match2))
-				$match = $match2;
-			else
-				throw new \exception('不存在的方法');
-			$this->getDataFromMy($match, $parms);
-			return $this->load();
-		/* } */
+
+		preg_match( "/^find_([\w]*)_by_([\w]*)_order_by_([\w]*)$/",  $name, $match1);
+		preg_match( "/^find_([\w]*)_by_([\w]*)$/",  $name, $match2);
+		if(!empty($match1))
+			$match = $match1;
+		elseif(!empty($match2))
+			$match = $match2;
+		else
+			throw new \exception('不存在的方法');
+		$this->getDataFromMy($match, $parms);
+		return $this->load();
 	}
 
 	public function __set($name, $value)
 	{
 		//
+		return null;
 	}
 
 	/**
@@ -77,17 +71,7 @@ abstract class MapperBase
 			}
 			$objArray[] = $obj;
 		}
-		return count($objArray) == 1 ? array_pop($objArray) : $objArray;
-	}
-
-	private function getDataById($id)
-	{
-		$this->data = $this->cache->get($id);
-		if(empty($this->data))
-		{
-			$this->data = $this->my->getDataById($this->table,$id);
-			$this->cache->set($id, $this->data);
-		}
+		return $this->one ? array_pop($objArray) : $objArray;
 	}
 
 	/**
@@ -99,17 +83,35 @@ abstract class MapperBase
 	 */
 	public function save(EntityBase $obj)
 	{
+		if( !($obj instanceof EntityBase))
+			return 0;
 		$data = array();
-		foreach($this->data as $k=>$v)
+		$id = $obj->getId();
+		if($id ==0 )//插入数据
 		{
-			if(strcmp($obj->$k, $v) !== 0)
-				$data[$k] = $obj->$k;
+			$data = $obj->getAllData();
+			$data['id'] = IdCreate::get();
+			$this->my->insertData($this->table, $data);
+			return $data['id'];
 		}
-		return $this->my->updateById($this->table, $obj->getId(), $data);
+		else
+		{
+			//获取数据并删除缓存
+			$cacheData = $this->cache->dget($id);
+			foreach($cacheData as $k=>$v)
+			{
+				if($k != 'id' && strcmp($obj->$k, $v) !== 0)
+					$data[$k] = $obj->$k;
+			}
+			if(!empty($data))
+				return $this->my->updateById($this->table, $id, $data);
+			else
+				return 0;
+		}
 	}
 
 	/**
-	 * @brief 从数据库查找
+	 * @brief 从数据库或者cache中查找
 	 *
 	 * @params $match
 	 * @params $params
@@ -127,6 +129,7 @@ abstract class MapperBase
 		{
 			$limit = array(0,1);
 			$fields = array('*');
+			$this->one = true;//只查询一条
 		}
 		$where = explode('_and_' , $match[2]);
 		if(isset($match[3]))

@@ -47,4 +47,14 @@ class MCached
 	{
 		$this->cache->delete($key);
 	}
+
+	public function dget($k)
+	{
+		$value = $this->cache->get($k);
+		$this->cache->delete($k);
+		if($this->cache->getResultCode() == Memcached::RES_SUCCESS)
+			return $value;
+		else
+			return false;
+	}
 }

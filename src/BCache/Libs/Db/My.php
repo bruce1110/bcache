@@ -211,15 +211,35 @@ class My
 		return $this->query($query, $params);
 	}
 
+	/**
+	 * @brief 根据条件查询相应的字段 
+	 *
+	 * @params $tableName
+	 * @params $fields
+	 * @params $where
+	 * @params $order
+	 * @params $limit
+	 * @params $params
+	 *
+	 * @return
+	 */
 	public function getOrderDataByWhere($tableName, $fields, $where, $order, $limit, $params)
 	{
 		$fields_str = implode($fields, ',');
 		$where_str = implode($where, ' = ? and ') . ' = ?';
 		$order_str = str_replace('_', ' ', implode($order, ','));
+		$where_value = array();
+		foreach($where as $v)
+		{
+			if(isset($params[$v]))
+				$where_value[] = $params[$v];
+			else
+				throw new \exception('字段名称有误');
+		}
 		$limit_str = '';
 		if(!empty($limit))
 			$limit_str = ' LIMIT ' . implode($limit, ',');
 		$sql = 'SELECT '. $fields_str . ' FROM ' . $tableName . ' WHERE ' . $where_str . ' ORDER BY ' . $order_str . $limit_str;
-		return $this->query($sql, array_values($params));
+		return $this->query($sql, $where_value);
 	}
 }
