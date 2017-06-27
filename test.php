@@ -1,12 +1,24 @@
 <?php
 
 require('start.php');
-use BCache\App\Entity\Users;
-use BCache\App\Mapper\UsersMapper;
-use BCache\App\Smarty\Smarty;
+use \Pux\Executor;
 
-$Smarty = new Smarty();
-
+$uri = $_SERVER['REQUEST_URI'];
+$pattern = '/^\/(.*?)\/(.*?)\/?$/';
+$num = preg_match($pattern, $uri, $match);
+if($num > 0)
+{
+	$mux = new Pux\Mux;
+	$_con = $match[1];
+	$action = $match[2];
+	$con = "BCache\App\Controller\\" . $_con . "Controller";
+	$controller = new $con();
+	$submux = $controller->expand();
+	$mux->mount( '/users' , $submux);
+	$a = $mux->dispatch('/users/'. $action);
+	if(!empty($a))
+		Executor::execute($a);
+}
 /* $um = new UsersMapper(); */
 /* $a = $um->find_one_by_name_and_address_order_by_id_desc(array('address'=>'shanghai', 'name'=>'qin')); */
 /* $a->name = 'qinchong'; */
