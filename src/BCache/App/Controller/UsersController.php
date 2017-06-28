@@ -20,6 +20,7 @@ class UsersController extends ControllerBase
 	public function delAction()
 	{
 		echo 'del';
+		$this->isok();
 	}
 	
 }
