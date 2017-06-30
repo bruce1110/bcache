@@ -1,7 +1,8 @@
 <?php
 
 namespace BCache\App\Application;
-use BCache\App\Application\start;
+use BCache\App\Application\app;
+use BCache\Libs\Exception\Blog;
 class init
 {
 	private static $_app;
@@ -13,19 +14,15 @@ class init
 	public static function start()
 	{
 		self::register_error_exception();
-		self::$_app = new start();
+		self::$_app = new app();
 		return self::$_app;
-	}
-
-	private static function end()
-	{
-		exit(1);
 	}
 
 	private static function register_error_exception()
 	{
 		set_exception_handler(array("\BCache\App\Application\init", "handlerException"));
-		set_error_handler(array("\BCache\App\Application\init", "handlerError"));
+		set_error_handler(array("\BCache\App\Application\init", "handlerError"), error_reporting());
+		register_shutdown_function(array('\BCache\App\Application\init', 'end'));
 	}
 
 	public static function handlerException($exception)
@@ -33,7 +30,7 @@ class init
 		restore_error_handler();
 		restore_exception_handler();
 		$message = $exception->__toString();
-		echo $message;
+		Blog::out('HandleException')->warning($message);
 	}
 
 	public static function handlerError($code, $message, $file, $line)
@@ -60,7 +57,14 @@ class init
 		}                               
 		if(isset($_SERVER['REQUEST_URI']))
 			$log.='REQUEST_URI='.$_SERVER['REQUEST_URI'];
-		/* LG::log('HandleError')->error($log); */
-		echo $log;
+		Blog::out('HandleError')->error($log);
+	}
+
+	public static function end()
+	{
+		$e = print_r(error_get_last()['message'], true);
+		if(!empty($e))
+			Blog::out('Error')->error($e);
+		exit(0);
 	}
 }

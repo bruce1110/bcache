@@ -1,6 +1,7 @@
 <?php
 namespace BCache\App\Controller;
 use BCache\Libs\Controller\ControllerBase;
+use BCache\Libs\Exception\Bexception;
 
 class UsersController extends ControllerBase
 {
@@ -20,7 +21,6 @@ class UsersController extends ControllerBase
 	public function delAction()
 	{
 		echo 'del';
-		$this->isok();
 	}
 	
 }

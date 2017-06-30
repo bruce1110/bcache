@@ -3,7 +3,7 @@
 namespace BCache\App\Application;
 
 use BCache\Libs\Exception\Bexception;
-class start
+class app
 {
 	public function __construct()
 	{
@@ -36,14 +36,19 @@ class start
 			$_con = $match[1];
 			$action = $match[2];
 			$con = "BCache\App\Controller\\" . $_con . "Controller";
-			$controller = new $con();
-			$submux = $controller->expand();
-			$mux->mount( '/users' , $submux);
-			$a = $mux->dispatch('/users/'. $action);
-			if(!empty($a))
-				\Pux\Executor::execute($a);
+			if(class_exists($con))
+			{
+				$controller = new $con();
+				$submux = $controller->expand();
+				$mux->mount( '/users' , $submux);
+				$a = $mux->dispatch('/users/'. $action);
+				if(!empty($a))
+					\Pux\Executor::execute($a);
+				else
+					throw new Bexception('没有找到控制器方法');
+			}
 			else
-				throw new Bexception('没有找到控制器方法');
+				throw new Bexception('不存在的控制器');
 		}
 	}
 }

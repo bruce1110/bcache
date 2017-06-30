@@ -1,6 +1,6 @@
 <?php
 namespace BCache\Libs\Configs;
-
+use BCache\Libs\Exception\Bexception;
 class Config
 {
 	private static $configs = null;
@@ -31,5 +31,15 @@ class Config
 	{
 		self::$configs = empty(self::$configs)?parse_ini_file(ROOT . '/configs/config.ini', true) : self::$configs;
 		return self::$configs['mysqld'];
+	}
+
+	public static function getConfigs($k)
+	{
+		self::$configs = empty(self::$configs)?parse_ini_file(ROOT . '/configs/config.ini', true) : self::$configs;
+		$config = isset(self::$configs[$k])&&!empty(self::$configs[$k]) ? self::$configs[$k] : null;
+		if(empty($config))
+			throw new Bexception('配置载入失败');
+		else
+			return $config;
 	}
 }
