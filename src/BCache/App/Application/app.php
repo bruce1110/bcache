@@ -29,6 +29,10 @@ class app
 	{
 		$uri = $_SERVER['REQUEST_URI'];
 		$pattern = '/^\/(.*?)\/(.*?)\/?$/';
+		if($uri == '/')
+		{
+
+		}
 		$num = preg_match($pattern, $uri, $match);
 		if($num > 0)
 		{
