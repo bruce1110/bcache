@@ -4,9 +4,11 @@
  * @author root
  * @desc 默认控制器
  * @see http://www.php.net/manual/en/class.yaf-controller-abstract.php
- */
-use BCache\Libs\controller\ControllerBase;
-class IndexController extends ControllerBase {
+ */		
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Handler\FirePHPHandler;
+class IndexController extends Yaf\Controller_Abstract {
 
 	/** 
      * 默认动作
@@ -24,16 +26,22 @@ class IndexController extends ControllerBase {
 		//3. assign
 		$this->getView()->assign("content", $model->selectSample());
 		$this->getView()->assign("name", $name);
-
 		//4. render by Yaf, 如果这里返回FALSE, Yaf将不会调用自动视图引擎Render模板
         return TRUE;
 	}
 
 	public function testAction()
 	{
-		$model = new UsersModel();
-		$model->add();
-		return false;
+		// Create the logger
+		$logger = new Logger('my_logger');
+		// Now add some handlers
+		$logger->pushHandler(new StreamHandler('/tmp/your.log', Logger::DEBUG));
+		$logger->pushHandler(new FirePHPHandler());
+
+		// You can now use your logger
+		$logger->info('My logger is now ready');
+		$this->getView()->assign('date', date('Y-m-d H:i:s'));
+		return true;
 	}
 
 	public function forwardAction()

@@ -7,6 +7,6 @@ class UsersModel
 
 	public function add()
 	{
-		echo 'add111';
+		echo 'add';
 	}
 }
