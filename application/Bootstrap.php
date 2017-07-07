@@ -17,8 +17,8 @@ class Bootstrap extends Yaf\Bootstrap_Abstract{
 
 	public function _initPlugin(Yaf\Dispatcher $dispatcher) {
 		//注册一个插件
-		$objSamplePlugin = new SamplePlugin();
-		$dispatcher->registerPlugin($objSamplePlugin);
+		$userplugin = new UserPlugin();
+		$dispatcher->registerPlugin($userplugin);
 	}
 
 	public function _initRoute(Yaf\Dispatcher $dispatcher) {
