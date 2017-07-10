@@ -63,7 +63,7 @@ abstract class MapperBase
 		{
 			//放入缓存
 			$this->cache->set($data['id'], $data);
-			$obj = new Users($data['id']);
+			$obj = new $this->mapper($data['id']);
 			foreach($data as $k=>$v)
 			{
 				if(strcmp($k, 'id') !== 0)

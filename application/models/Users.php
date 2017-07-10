@@ -14,7 +14,10 @@ class UsersModel
 	{
 		$um  = new UsersMapper();
 		$user = $um->find_one_by_name(array('name'=>'qinchong'));
-		$user->name = 'qinchong333';
-		return $um->save($user);
+		if(!empty($user))
+		{
+			$user->name = 'qinchong333';
+			return $um->save($user);
+		}
 	}
 }
