@@ -12,7 +12,7 @@ class My
 	private static $DBPassword;
 	private static $pdo = null;
 	private $sQuery;
-	private $bConnected = false;
+	/* private $bConnected = false; */
 	private $parameters;
 	public $rowCount   = 0;
 	public $columnCount   = 0;
@@ -22,7 +22,8 @@ class My
 	public function __construct()
 	{
 		
-		$this->Connect();
+		if(empty(self::$pdo))
+			$this->Connect();
 		$this->parameters = array();
 	}
 
@@ -73,7 +74,7 @@ class My
 
 	private function Init($query, $parameters = "")
 	{
-		if (!$this->bConnected) {
+		if (empty(self::$pdo)) {
 			$this->Connect();
 		}
 		try {

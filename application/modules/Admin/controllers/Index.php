@@ -60,7 +60,7 @@ class IndexController extends Yaf\Controller_Abstract {
 	}
 
 	/**
-	 * @brief 首先请求
+	 * @brief 首先执行
 	 *
 	 * @return
 	 */

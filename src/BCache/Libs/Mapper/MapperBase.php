@@ -11,7 +11,6 @@ namespace BCache\Libs\Mapper;
 use BCache\Libs\Cache\MCached;
 use BCache\Libs\Db\My;
 use BCache\Libs\Entity\EntityBase;
-use BCache\App\Entity\Users;
 use BCache\Libs\UUId\IdCreate;
 
 abstract class MapperBase
