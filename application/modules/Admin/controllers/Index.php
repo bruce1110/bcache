@@ -40,9 +40,14 @@ class IndexController extends Yaf\Controller_Abstract {
 
 		/* // You can now use your logger */
 		/* $logger->info('My logger is now ready'); */
-		Yaf\Application::app()->getDispatcher()->returnResponse(TRUE);
+		Yaf\Application::app()->getDispatcher()->returnResponse(TRUE);//关闭自动响应
 		$this->getView()->assign('date', date('Y-m-d'));
-		$response = $this->getResponse()->response();
+		/* $view = $this->getView(); */
+		/* var_dump($view); */
+		/* return false; */
+		/* $response = $this->getResponse()->response(); */
+		$this->display("test");
+		return false;
 	}
 
 	public function forwardAction()
