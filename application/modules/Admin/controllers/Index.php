@@ -42,11 +42,14 @@ class IndexController extends Yaf\Controller_Abstract {
 		/* $logger->info('My logger is now ready'); */
 		Yaf\Application::app()->getDispatcher()->returnResponse(TRUE);//关闭自动响应
 		$this->getView()->assign('date', date('Y-m-d'));
+		$model = new UsersModel();
+		$user = $model->update('qinchong2222');
+		var_dump($user);
 		/* $view = $this->getView(); */
 		/* var_dump($view); */
 		/* return false; */
 		/* $response = $this->getResponse()->response(); */
-		$this->display("test");
+		$this->display("test");//手动响应输出
 		return false;
 	}
 

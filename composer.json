@@ -9,6 +9,11 @@
             "email": "bruce@bruce.net.cn"
         }
     ],
+    "autoload": {
+	    "psr-4": {
+	    "BCache\\": "src/BCache"
+    }
+    },
     "require": {
 	    "php":">=5.5.38",
 	    "monolog/monolog": "*"
