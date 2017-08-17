@@ -18,7 +18,7 @@ class UsersModel
 		$user = $um->find_one_by_name(array('name'=>'qinchong'));
 		if(!empty($user))
 		{
-			$user->name = 'qinchong333';
+			$user->name = $name;
 			return $um->save($user);
 		}
 	}

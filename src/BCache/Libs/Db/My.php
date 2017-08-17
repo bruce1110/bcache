@@ -32,7 +32,7 @@ class My
 	{
 		try {
 			if( !self::$pdo instanceof PDO ){
-				$configs = config::getMysqls();
+				$configs = Config::getMysqls();
 				self::$Dsn       = $configs['dsn'];
 				self::$DBUser     = $configs['user'];
 				self::$DBPassword = $configs['passwd'];
@@ -177,7 +177,7 @@ class My
 		if (!empty($sql)) {
 			$message .= "\r\nRaw SQL : " . $sql;
 		}
-		$this->log->write($message, $this->DBName . md5($this->DBPassword));
+		/* $this->log->write($message, $this->DBName . md5($this->DBPassword)); */
 		//Prevent search engines to crawl
 		header("HTTP/1.1 500 Internal Server Error");
 		header("Status: 500 Internal Server Error");

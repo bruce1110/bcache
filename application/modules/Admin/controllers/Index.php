@@ -43,13 +43,20 @@ class IndexController extends Yaf\Controller_Abstract {
 		Yaf\Application::app()->getDispatcher()->returnResponse(TRUE);//关闭自动响应
 		$this->getView()->assign('date', date('Y-m-d'));
 		$model = new UsersModel();
-		$user = $model->update('qinchong2222');
+		$user = $model->update('qinchong111222');
 		var_dump($user);
 		/* $view = $this->getView(); */
 		/* var_dump($view); */
 		/* return false; */
 		/* $response = $this->getResponse()->response(); */
 		$this->display("test");//手动响应输出
+		return false;
+	}
+
+	public function soaAction()
+	{
+		$userClient  = new service_User();
+		echo $userClient->admin_min(100,1000);
 		return false;
 	}
 
