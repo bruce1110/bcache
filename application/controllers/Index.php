@@ -40,9 +40,9 @@ class IndexController extends Yaf\Controller_Abstract {
 
 		/* // You can now use your logger */
 		/* $logger->info('My logger is now ready'); */
-		/* $this->getView()->assign('date', date('Y-m-d H:i:s')); */
+		$this->getView()->assign('date', date('Y-m-d H:i:s'));
 
-		return false;
+		return true;
 	}
 
 	public function forwardAction()

@@ -40,6 +40,11 @@ class IndexController extends Yaf\Controller_Abstract {
 
 		/* // You can now use your logger */
 		/* $logger->info('My logger is now ready'); */
+		$_GET['id'] = 10;
+		var_dump($_GET);
+		$str = "<script>alert('xss')</script>";
+		echo htmlspecialchars($str, ENT_QUOTES);
+		exit;
 		Yaf\Application::app()->getDispatcher()->returnResponse(TRUE);//关闭自动响应
 		$this->getView()->assign('date', date('Y-m-d'));
 		$model = new UsersModel();
